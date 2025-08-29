@@ -1,0 +1,22 @@
+{
+  "name": "Medieval Platformer",
+  "short_name": "MedievalGame",
+  "description": "A medieval-themed platformer game built with Rust and WebAssembly",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#2c1810",
+  "theme_color": "#8B4513",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

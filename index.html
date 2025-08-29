@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medieval Platformer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2c1810 0%, #1a0e08 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        #gameCanvas {
+            border: 4px solid #8B4513;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            background: #000;
+        }
+        
+        .controls {
+            color: #fff;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: 2px solid #8B4513;
+        }
+        
+        .controls h2 {
+            margin: 0 0 10px 0;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .control-row {
+            margin: 5px 0;
+        }
+        
+        .key {
+            display: inline-block;
+            background: #8B4513;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin: 0 3px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .loading {
+            color: #FFD700;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        #errorMessage {
+            color: #ff6b6b;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div id="loading" class="loading">Loading Medieval Adventure...</div>
+        <canvas id="gameCanvas" width="800" height="500" style="display: none;"></canvas>
+        <div id="errorMessage"></div>
+        <div class="controls" style="display: none;">
+            <h2>⚔️ Medieval Platformer ⚔️</h2>
+            <div class="control-row">
+                <span class="key">A</span>/<span class="key">←</span> Move Left
+                <span class="key">D</span>/<span class="key">→</span> Move Right
+            </div>
+            <div class="control-row">
+                <span class="key">W</span>/<span class="key">↑</span> Jump
+                <span class="key">Space</span> Attack
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import init, { GameEngine } from './pkg/medieval_platformer.js';
+        
+        async function run() {
+            try {
+                await init();
+                
+                const canvas = document.getElementById('gameCanvas');
+                const ctx = canvas.getContext('2d');
+                const gameEngine = new GameEngine();
+                
+                let lastTime = performance.now();
+                
+                function gameLoop(currentTime) {
+                    const delta = (currentTime - lastTime) / 16.67;
+                    lastTime = currentTime;
+                    
+                    gameEngine.update(delta);
+                    gameEngine.render(ctx);
+                    
+                    requestAnimationFrame(gameLoop);
+                }
+                
+                document.addEventListener('keydown', (e) => {
+                    e.preventDefault();
+                    gameEngine.key_down(e.key);
+                });
+                
+                document.addEventListener('keyup', (e) => {
+                    e.preventDefault();
+                    gameEngine.key_up(e.key);
+                });
+                
+                document.getElementById('loading').style.display = 'none';
+                canvas.style.display = 'block';
+                document.querySelector('.controls').style.display = 'block';
+                
+                requestAnimationFrame(gameLoop);
+                
+            } catch (error) {
+                console.error('Failed to initialize game:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorMessage').textContent = 'Failed to load game. Please ensure WASM is built.';
+            }
+        }
+        
+        run();
+    </script>
+</body>
+</html>
