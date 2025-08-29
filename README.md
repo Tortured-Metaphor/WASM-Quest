@@ -22,9 +22,7 @@
     ╚══════════════════════════════════════╝
 ```
 
-## 🎮 Play the Game
-
-**[Play Now](https://tortured-metaphor.github.io/WASM-Quest/)** | **[View Demo](https://github.com/Tortured-Metaphor/WASM-Quest)**
+## 🎮 About the Game
 
 A retro 8-bit medieval platformer built entirely in Rust and compiled to WebAssembly. Battle goblins, collect hearts, and journey through infinite procedurally generated levels!
 
